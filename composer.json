@@ -1,0 +1,39 @@
+{
+    "name": "kzxl/lite-api",
+    "description": "High-performance, lightweight API toolkit for Slim 4 and PSR-7/PSR-15 microservices: standard ApiResponse envelope, CORS, JWT authentication, JsonErrorHandler, and LiteORM per-request lifecycle bridge",
+    "type": "library",
+    "license": "Apache-2.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../LiteORM"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "psr/http-message": "^1.0 || ^2.0",
+        "psr/http-server-middleware": "^1.0",
+        "psr/http-server-handler": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "slim/slim": "^4.14",
+        "nyholm/psr7": "^1.8",
+        "kzxl/liteorm": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "LiteApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LiteApi\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --colors=always"
+    }
+}
