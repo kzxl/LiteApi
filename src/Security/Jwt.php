@@ -61,6 +61,13 @@ class Jwt
 
         [$headerB64, $payloadB64, $signatureB64] = $parts;
 
+        // Verify header algorithm to prevent algorithm confusion attacks (e.g. 'none' or asymmetric mismatch)
+        $headerJson = self::base64UrlDecode($headerB64);
+        $header = json_decode($headerJson, true);
+        if (!is_array($header) || ($header['alg'] ?? '') !== 'HS256') {
+            throw new \InvalidArgumentException('Unsupported or invalid JWT algorithm');
+        }
+
         // Verify signature
         $expectedSignature = hash_hmac('sha256', "{$headerB64}.{$payloadB64}", $secret, true);
         $givenSignature = self::base64UrlDecode($signatureB64);

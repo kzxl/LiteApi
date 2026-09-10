@@ -51,4 +51,18 @@ class JwtTest extends TestCase
         $this->expectExceptionMessage('JWT token has expired');
         Jwt::decode($token, self::SECRET);
     }
+
+    public function testRejectsUnsupportedAlgorithm(): void
+    {
+        // Malicious none-algorithm token: header = {"typ":"JWT","alg":"none"}
+        $headerB64 = rtrim(strtr(base64_encode('{"typ":"JWT","alg":"none"}'), '+/', '-_'), '=');
+        $payloadB64 = rtrim(strtr(base64_encode('{"sub":1,"exp":' . (time() + 3600) . '}'), '+/', '-_'), '=');
+        $token = "{$headerB64}.{$payloadB64}.";
+
+        $this->assertFalse(Jwt::verify($token, self::SECRET));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported or invalid JWT algorithm');
+        Jwt::decode($token, self::SECRET);
+    }
 }
