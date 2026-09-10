@@ -3,7 +3,7 @@
 High-performance, lightweight API toolkit for **Slim 4** and PSR-7 / PSR-15 microservices: standardized JSON envelopes, CORS preflight resolver, timing-safe JWT authentication, production-masked error handling, and LiteORM per-request lifecycle management.
 
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Slim 4 Ready](https://img.shields.io/badge/Slim-4.x-purple.svg)](https://www.slimframework.com/)
 [![PSR-7 / PSR-15](https://img.shields.io/badge/PSR-7%20%7C%2015-brightgreen.svg)]()
 [![Tests](https://img.shields.io/badge/Tests-19%2F19%20Pass%20(100%25)-brightgreen.svg)]()
@@ -151,5 +151,5 @@ composer test
 
 ## 📄 License
 
-Released under the **Apache-2.0 License**.  
+MIT License — see [LICENSE](LICENSE) for details.  
 Architected and developed by **Phong Võ** (`kzxl`).
