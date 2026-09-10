@@ -152,4 +152,5 @@ composer test
 ## 📄 License
 
 MIT License — see [LICENSE](LICENSE) for details.  
-Architected and developed by **Phong Võ** (`kzxl`).
+Architected and developed by **Phong Vo** (`kzxl`).
+
