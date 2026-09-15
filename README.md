@@ -1,5 +1,9 @@
 # LiteApi 🚀
 
+[![Latest Version](https://img.shields.io/github/v/release/kzxl/LiteApi?label=version&color=blue)](https://github.com/kzxl/LiteApi/releases)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.2-8892BF.svg)](https://php.net)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 High-performance, lightweight API toolkit for **Slim 4** and PSR-7 / PSR-15 microservices: standardized JSON envelopes, CORS preflight resolver, timing-safe JWT authentication, production-masked error handling, and LiteORM per-request lifecycle management.
 
 [![PHP 8.2+](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
@@ -24,8 +28,50 @@ High-performance, lightweight API toolkit for **Slim 4** and PSR-7 / PSR-15 micr
 
 ## 📦 Installation
 
+### Option 1: Standard Composer (via Packagist)
 ```bash
 composer require kzxl/lite-api
+```
+
+### Option 2: Direct from Git Repository (VCS)
+To pull directly from the official GitHub repository without waiting for Packagist synchronization, add the VCS repository to your project's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/kzxl/LiteApi.git"
+        }
+    ],
+    "require": {
+        "kzxl/lite-api": "^1.1.0"
+    }
+}
+```
+Or configure via CLI:
+```bash
+composer config repositories.lite-api vcs https://github.com/kzxl/LiteApi.git
+composer require kzxl/lite-api:^1.1.0
+```
+
+### Option 3: Local Path Repository (Monorepo / Development)
+For local development where changes should reflect immediately via symlink:
+```json
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../libs/LiteApi",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "kzxl/lite-api": "@dev"
+    }
+}
 ```
 
 ---
