@@ -23,6 +23,7 @@ High-performance, lightweight API toolkit for **Slim 4** and PSR-7 / PSR-15 micr
 | **Error Handling** | `JsonErrorHandler` | Dual-mode PSR-15 & Slim ErrorHandler: prevents HTML error leakage, provides standardized `{ success: false, error: {...} }` envelopes, and masks internal error details in production. |
 | **JWT Authentication** | `Jwt` & `JwtAuthMiddleware` | Zero-dependency HMAC-SHA256 (HS256) JWT engine with timing-attack prevention (`hash_equals`). Injects verified claims directly into `$request->getAttribute('user')`. |
 | **LiteORM Per-Request Bridge** | `LiteOrmMiddleware` | Manages `EntityManager` lifecycle per request: auto-flushes on success and clears memory snapshots on completion to prevent memory leaks in persistent workers (FrankenPHP, RoadRunner, Swoole). |
+| **OpenAPI 3.0 & Swagger UI** | `OpenApiDocument` | Sovereign, zero-dependency OpenAPI 3.0.3 specification builder, PHP attribute scanner (`#[RouteDoc]`, `#[ApiResponse]`), DTO schema reflector, and embedded Swagger UI / Redoc HTML renderer. |
 
 ---
 
@@ -181,6 +182,67 @@ $app->run();
     "type": "NOT_FOUND"
   }
 }
+```
+
+---
+
+## 📖 OpenAPI 3.0 & Swagger UI Generator
+
+LiteApi provides a zero-dependency OpenAPI 3.0.3 generator that scans PHP 8.2 attributes from controllers, extracts DTO schemas automatically, and serves interactive Swagger UI & Redoc documentation.
+
+### 1. Document Controller with Attributes
+
+```php
+use LiteApi\OpenApi\Attribute\RouteDoc;
+use LiteApi\OpenApi\Attribute\Param;
+use LiteApi\OpenApi\Attribute\RequestBody;
+use LiteApi\OpenApi\Attribute\ApiResponse;
+use LiteApi\OpenApi\Attribute\Security;
+
+class OrderController
+{
+    #[RouteDoc(summary: 'List orders', tags: ['Orders'], method: 'GET', path: '/api/orders')]
+    #[Param(name: 'page', in: 'query', description: 'Page number', type: 'integer', default: 1)]
+    #[ApiResponse(status: 200, description: 'Order list', schema: OrderListDTO::class)]
+    #[Security('bearerAuth')]
+    public function list(): void {}
+
+    #[RouteDoc(summary: 'Create an order', tags: ['Orders'], method: 'POST', path: '/api/orders')]
+    #[RequestBody(schema: CreateOrderDTO::class, description: 'New order details')]
+    #[ApiResponse(status: 201, description: 'Order created', schema: OrderDetailDTO::class)]
+    #[ApiResponse(status: 400, description: 'Validation failure')]
+    public function create(): void {}
+}
+```
+
+### 2. Mount JSON Spec and Swagger UI in Slim 4
+
+```php
+use LiteApi\OpenApi\OpenApiDocument;
+
+$docs = new OpenApiDocument(
+    title: 'Acme Enterprise API',
+    version: '1.0.0',
+    description: 'High-performance microservices API'
+);
+
+// Scan controllers
+$docs->scanController(OrderController::class);
+
+// 1. Serve OpenAPI 3.0 JSON specification
+$app->get('/openapi.json', function ($request, $response) use ($docs) {
+    return $docs->toJsonResponse($response);
+});
+
+// 2. Serve interactive Swagger UI
+$app->get('/docs', function ($request, $response) use ($docs) {
+    return $docs->toSwaggerUiResponse($response, specUrl: '/openapi.json');
+});
+
+// 3. Optional: Serve Redoc viewer
+$app->get('/redoc', function ($request, $response) use ($docs) {
+    return $docs->toRedocResponse($response, specUrl: '/openapi.json');
+});
 ```
 
 ---
